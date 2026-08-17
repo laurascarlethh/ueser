@@ -344,6 +344,47 @@ function showComplete(){
  document.getElementById('finalScore').textContent=Math.round(score/50) + '/20';
  document.getElementById('finalMsg').textContent=streak>=15?'🏆 ¡Racha increíble!':score>=750?'🌟 ¡Excelente trabajo!':'💪 ¡Misión completada! Revisa los retos que más te costaron.';
 }
+function registerEntry(){
+
+  // Evita registrar nuevamente en el mismo dispositivo
+  if(localStorage.getItem("entradaRegistrada") === "true"){
+    return;
+  }
+
+  const name = prompt("👋 Antes de comenzar, escribe tu nombre y apellido:");
+
+  if(!name || !name.trim()){
+    alert("Debes escribir tu nombre y apellido para comenzar.");
+    return;
+  }
+
+  const form = document.createElement('form');
+
+  form.method = 'POST';
+
+  form.action =
+    'https://docs.google.com/forms/d/e/1FAIpQLSfibHLanxcXNpYQPxfbuW8x2KCB5ORPH-suV8IU5W7V4VGxA/formResponse';
+
+  form.target = 'hiddenFrame';
+  form.style.display = 'none';
+
+  const input = document.createElement('input');
+
+  input.type = 'text';
+  input.name = 'entry.435675236';
+  input.value = name.trim();
+
+  form.appendChild(input);
+  document.body.appendChild(form);
+
+  form.submit();
+ 
+  localStorage.setItem("entradaRegistrada", "true");
+
+  setTimeout(() => {
+    form.remove();
+  }, 1000);
+}
 function registerStudent(){
 
   const name = document.getElementById('studentName').value.trim();
@@ -397,6 +438,7 @@ function updateHud(){
 }
 function toast(t){const x=document.getElementById('toast');x.textContent=t;x.classList.add('show');setTimeout(()=>x.classList.remove('show'),1200);}
 const hadSave=loadGame();
+setTimeout(registerEntry, 500);
 document.getElementById('soundText').textContent=muted?'OFF':'ON';
 for(let i=0;i<ids.length;i++){
   const el=document.getElementById(ids[i]);
